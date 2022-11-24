@@ -9,7 +9,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,11 +43,12 @@ class MyHomePage extends StatelessWidget {
           CarouselSlider.builder(
             itemCount: 3,
             itemBuilder:
-                (BuildContext context, int itemIndex, int pageViewIndex) => Container(
-                  width: 200,
-                  height: 250,
-                  color: Color(0xff7036E6),
-                  child: Text(itemIndex.toString()),
+                (BuildContext context, int itemIndex, int pageViewIndex) =>
+                    Container(
+              width: 200,
+              height: 250,
+              color: Color(0xff7036E6),
+              child: Text(itemIndex.toString()),
             ),
             options: CarouselOptions(
               height: 200,
