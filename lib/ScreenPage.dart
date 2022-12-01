@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:platform_date_picker/platform_date_picker.dart';
 
-class ScreenPage extends StatelessWidget {
+class ScreenPage extends StatefulWidget {
   const ScreenPage({Key? key}) : super(key: key);
+
+  @override
+  State<ScreenPage> createState() => _ScreenPageState();
+}
+
+class _ScreenPageState extends State<ScreenPage> {
+  TimeOfDay time1 = TimeOfDay.now();
+  TimeOfDay time2 = TimeOfDay.now();
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +74,53 @@ class ScreenPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 100,
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row (
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text("Start time", style: TextStyle(color: Colors.grey),),
+                      MaterialButton(
+                        elevation: 0,
+                        height: 70,
+                        minWidth: 100,
+                        color: Colors.white,
+                        child: Text(formatTime(time2),style: TextStyle(fontSize: 32),),
+                        onPressed: () async {
+                          TimeOfDay? temp = await showPlatformTimePicker(
+                            context: context,
+                            initialTime: time2,
+                          );
+                          if (temp != null) setState(() => time2 = temp);
+                        },
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text("End time", style: TextStyle(color: Colors.grey),),
+                      MaterialButton(
+                        elevation: 0,
+                        height: 70,
+                        minWidth: 100,
+                        color: Colors.white,
+                        child: Text(formatTime(time1),style: TextStyle(fontSize: 32),),
+                        onPressed: () async {
+                          TimeOfDay? temp = await showPlatformTimePicker(
+                            context: context,
+                            initialTime: time1,
+                          );
+                          if (temp != null) setState(() => time1 = temp);
+                        },
+                      ),
+                    ],
+                  ),
+                ]
+              ),
             ),
             Padding(
               padding: EdgeInsets.only(left: 10, top: 10),
@@ -274,3 +329,11 @@ class ScreenPage extends StatelessWidget {
     );
   }
 }
+String formatTime(TimeOfDay time) {
+  DateTime current = new DateTime.now();
+  current = DateTime(
+      current.year, current.month, current.day, time.hour, time.minute);
+  DateFormat format = DateFormat.jm();
+  return format.format(current);
+}
+

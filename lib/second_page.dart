@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_week/flutter_calendar_week.dart';
 import 'package:intl/intl.dart';
+import 'package:teamwork/ScreenPage.dart';
 
 class SecondPage extends StatefulWidget {
   const SecondPage({Key? key}) : super(key: key);
@@ -81,7 +82,11 @@ class _SecondPageState extends State<SecondPage> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ScreenPage()),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(15),
                       shape: StadiumBorder(),
