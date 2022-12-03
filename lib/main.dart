@@ -1,10 +1,14 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 import 'package:teamwork/second_page.dart';
+import 'package:teamwork/hi.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => MainProvider()),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -43,9 +47,8 @@ class MyHomePage extends StatelessWidget {
         children: [
           CarouselSlider.builder(
             itemCount: 3,
-            itemBuilder:
-                (BuildContext context, int itemIndex, int pageViewIndex) =>
-                    Container(
+            itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
+             Container(
               width: 200,
               height: 250,
               color: Color(0xff7036E6),
@@ -67,72 +70,90 @@ class MyHomePage extends StatelessWidget {
           ),
           Container(
             padding: EdgeInsets.only(top: 30, left: 20, bottom: 30),
-            child: Text("Progress", style: TextStyle(fontSize: 32),),
+            child: Text(
+              "Progress",
+              style: TextStyle(fontSize: 32),
+            ),
           ),
-          Expanded(child: ListView.builder(
-              itemCount: 8,
-              scrollDirection: Axis.vertical,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.only(
-                      left: 30, right: 30, top: 10, bottom: 10),
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              padding:EdgeInsets.all(20),
-                              margin: EdgeInsets.only(right: 20),
-                              decoration: BoxDecoration(
-                                color: Color(0xff7837F5),
-                                borderRadius: BorderRadius.circular(5),
+          Expanded(
+            child: ListView.builder(
+                itemCount: 8,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.only(
+                        left: 30, right: 30, top: 10, bottom: 10),
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(20),
+                                margin: EdgeInsets.only(right: 20),
+                                decoration: BoxDecoration(
+                                  color: Color(0xff7837F5),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Icon(
+                                  Icons.event_note_outlined,
+                                  color: Colors.white,
+                                ),
                               ),
-                              child: Icon(Icons.event_note_outlined, color: Colors.white,),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text("Design Changes", style: TextStyle(color: Colors.black, fontSize: 18,fontWeight: FontWeight.bold),),
-                                Text("2 days ago", style: TextStyle(color: Colors.grey, fontSize: 14),)
-                              ],
-                            ),
-                          ],
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Design Changes",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "2 days ago",
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 14),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      PopupMenuButton(
-                        onSelected: (value) {
-                          // your logic
-                        },
-                        itemBuilder: (BuildContext bc) {
-                          return const [
-                            PopupMenuItem(
-                              child: Text("Add"),
-                              value: '/add',
-                            ),
-                            PopupMenuItem(
-                              child: Text("Remove"),
-                              value: '/remove',
-                            ),
-                            PopupMenuItem(
-                              child: Text("Update"),
-                              value: '/update',
-                            )
-                          ];
-                        },
-                      )
-                    ],
-                  ),
-                );
-              }),),
+                        PopupMenuButton(
+                          onSelected: (value) {
+                            // your logic
+                          },
+                          itemBuilder: (BuildContext bc) {
+                            return const [
+                              PopupMenuItem(
+                                child: Text("Add"),
+                                value: '/add',
+                              ),
+                              PopupMenuItem(
+                                child: Text("Remove"),
+                                value: '/remove',
+                              ),
+                              PopupMenuItem(
+                                child: Text("Update"),
+                                value: '/update',
+                              )
+                            ];
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                }),
+          ),
         ],
       ),
     );

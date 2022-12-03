@@ -2,17 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_date_picker/platform_date_picker.dart';
+import 'package:teamwork/task.dart';
+
+import 'database.dart';
 
 class ScreenPage extends StatefulWidget {
-  const ScreenPage({Key? key}) : super(key: key);
+  Task? currentTask;
+  ScreenPage({this.currentTask,Key? key}) : super(key: key);
 
   @override
   State<ScreenPage> createState() => _ScreenPageState();
+
 }
 
 class _ScreenPageState extends State<ScreenPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
   TimeOfDay time1 = TimeOfDay.now();
   TimeOfDay time2 = TimeOfDay.now();
+  late TimeOfDay picket;
+  late TimeOfDay picket2;
+  void initState() {
+    super.initState();
+    time1 = TimeOfDay.now();
+    time2 = TimeOfDay.now();
+
+    if (widget.currentTask != null) {
+      _nameController.text = widget.currentTask?.title ?? "...";
+      _dateController.text = widget.currentTask?.startTime ?? "...";
+    }
+  }
+
+  //select time
+  Future<void> selectTime(BuildContext context) async {
+    picket = (await showTimePicker(context: context, initialTime: time1))!;
+    if (picket != null) {
+      setState(() {
+        time1 = picket;
+      });
+    }
+  }
+
+  Future<void> selectTime2(BuildContext context) async {
+    picket2 = (await showTimePicker(context: context, initialTime: time2))!;
+    if (picket2 != null) {
+      setState(() {
+        time2 = picket2;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +77,7 @@ class _ScreenPageState extends State<ScreenPage> {
                 Padding(
                   padding: EdgeInsets.only(left: 10, right: 40),
                   child: TextField(
+                    controller: _nameController,
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -55,6 +95,7 @@ class _ScreenPageState extends State<ScreenPage> {
                 Padding(
                   padding: EdgeInsets.only(left: 10, right: 40),
                   child: TextField(
+                    controller: _dateController,
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -303,7 +344,7 @@ class _ScreenPageState extends State<ScreenPage> {
               padding: EdgeInsets.only(left: 10, top: 15, right: 10),
               child: GestureDetector(
                 onTap: () {
-                  print('bosildi');
+                  widget.currentTask == null ? createTask() : updateTask();
                 },
                 child: Container(
                   width: 400,
@@ -328,6 +369,23 @@ class _ScreenPageState extends State<ScreenPage> {
       ),
     );
   }
+  void createTask() async {
+    Task newTask = Task(
+        _nameController.text, "description1", DateTime.now(), "18:58", "00:00");
+
+    var task = DatabaseHelper.intance.insert(newTask);
+    Navigator.pop(context);
+    print("chiqdi: $task");
+  }
+
+  void updateTask() async {
+    Task currentTask = Task.withId(widget.currentTask?.id, _nameController.text, "description1",
+        DateTime.now(), _dateController.text, "00:00");
+
+    var res = await DatabaseHelper.intance.update(currentTask);
+
+    Navigator.pop(context);
+  }
 }
 String formatTime(TimeOfDay time) {
   DateTime current = new DateTime.now();
@@ -336,4 +394,5 @@ String formatTime(TimeOfDay time) {
   DateFormat format = DateFormat.jm();
   return format.format(current);
 }
+
 
